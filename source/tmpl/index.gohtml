@@ -1,30 +1,143 @@
-{{define "title"}}{{CoreApp.Name}} Status{{end}}
-{{define "description"}}{{CoreApp.Name}} is currently monitoring {{len CoreApp.Services}} services with 0 of them offline. {{CoreApp.Name}} is using Statping to monitor applications.{{end}}
+{{define "title"}}{{CoreApp.Name}} | Status{{end}}
+{{define "description"}}Welcome to the statuspage of DiscordBotHosting. Here you can see if our system is online & operational and view the total uptime.{{end}}
 {{define "content"}}
-<div class="container col-md-7 col-sm-12 mt-2 sm-container">
-<h1 class="col-12 text-center mb-4 mt-sm-3 header-title">{{.Name}}</h1>
+    <div class="page">
+      <header class="page-head">
+        <div class="rd-navbar-wrap">
+          <nav data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fullwidth" data-md-layout="rd-navbar-fullwidth" data-lg-layout="rd-navbar-fullwidth" data-lg-device-layout="rd-navbar-fullwidth" data-md-stick-up-offset="105px" data-lg-stick-up-offset="105px" class="rd-navbar">
+            <div class="rd-navbar-inner">
+              <div class="rd-navbar-panel">
+                <button data-rd-navbar-toggle=".rd-navbar-nav-wrap" class="rd-navbar-toggle"><span></span></button>
+                  <a href="/" class="rd-navbar-brand"><img class="brand-name" src="https://discordbothosting.com/dbh/images/DBH.png" width="120" height="50">
+              </div>
+              <div class="rd-navbar-nav-wrap">
+                <ul class="rd-navbar-nav">
+                  <li><a href="/#home">Home</a></li>
+                  <li><a href="/#discord">Our discord</a></li>
+                  <li><a href="/#why-us">Why us?</a></li>
+                  <li><a href="/#stats">Statistics</a></li>
+                  <li><a href="/#plans">Plans</a></li>
+                  <li><a href="/#panel">Our panel</a></li>
+                  <li><a href="#status">Status</a></li>
+                  <li><a href="/#reviews">Reviews</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <div data-min-height="400px" data-autoplay="5000" class="swiper-container swiper-slider bg-gray-darker" id="home">
+        <div class="swiper-wrapper">
+          <div data-slide-bg="dbh/images/home-slide-1.jpg" class="swiper-slide">
+            <div class="swiper-slide-caption">
+              <div class="shell">
+                <div class="range range-sm-center range-condensed">
+                  <div class="cell-xs-12">
+                    <div class="swiper-slide-caption-body">
+                      <h4 class="text-light text-primary">THE NEW BOT-HOSTING:</h4>
+                      <h2>EASY TO CONTROL</h2>
+                      <h3 class="text-vivid-orange">& REALLY CHEAP!</h3>
+                      <p>We have our own panel based on Pterodactyl, this way you can easily manage your bot and via the built-in file manager also easily update your bot.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-slide-bg="dbh/images/home-slide-2.jpg" class="swiper-slide">
+            <div class="swiper-slide-caption">
+              <div class="shell">
+                <div class="range range-sm-center range-condensed">
+                  <div class="cell-xs-12">
+                    <div class="swiper-slide-caption-body">
+                      <h2>WITH CODE SUPPORT:</h2>
+                      <h3 class="text-vivid-orange">FOR THOSE ERRORS YOU CAN'T FIX YOURSELF.</h3>
+                      <p>You don't get your code anymore? You are trying to fix that damn error? Don't worry, we got your back! We will do our best to make your code working (again)!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-slide-bg="dbh/images/home-slide-3.jpg" class="swiper-slide">
+            <div class="swiper-slide-caption">
+              <div class="shell">
+                <div class="range range-sm-center range-condensed">
+                  <div class="cell-xs-12">
+                    <div class="swiper-slide-caption-body">
+                      <h2>24/7 uptime:</h2>
+                      <h3 class="text-vivid-orange">WITH HETZNER DDOS PROTECTION.</h3>
+                      <p>Each plan comes with HETZNER DDOS protection and 24/7 uptime.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-nav">
+          <div class="shell">
+            <div class="range range-sm-justify">
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-{{ if .Description }}
-<h5 class="col-12 text-center mb-5 header-desc">{{ .Description }}</h5>
-{{ end }}
+      <main class="page-content">
+        <section class="section-80 section-sm-80 section-lg-139">
+          <div class="shell text-center">
+            <div class="range range-sm-center">
+              <div class="cell-xs-12 cell-md-11 cell-lg-10">
+                <h3><span>DISCORDBOTHOSTING</span><span class="text-light text-vivid-orange">STATUS PAGE</span></h3>
+              </div>
+            </div>
+          </div>
+          <br>
+     	<div class="layout-content status status-index starter">
+    <div class="container">
+        <div class="page-status status-none">
+          <span class="status font-large" style="color:#000;">
+            All Systems Operational
+          </span>
+          <span class="last-updated-stamp  font-small"></span>
+        </div>
+        <div class="components-section font-regular">
+      <i class="component-status hidden major_outage"></i>
+      
 
 {{ range Groups true }}
     {{if ne (len .Services) 0}}
-    <div class="col-12 full-col-12">
-        <h4 class="group_header">{{.Name}}</h4>
-        <div class="list-group online_list mb-3">
-            {{ range VisibleGroupServices . }}
-            <a href="#" class="service_li list-group-item list-group-item-action {{if not .Online}}bg-danger text-white{{ end }}" data-id="{{.Id}}">
-                {{ .Name }}
-                {{if .Online}}
-                    <span class="badge bg-success float-right pulse-glow">ONLINE</span>
+    <div class="components-container one-column">
+            <div class="component-container border-color">
+            <span class="name">{{ .Name }}</span>
+    {{ range VisibleGroupServices . }}
+   <a href="#" class="service_li list-group-item list-group-item-action {{if not .Online}}bg-danger text-white{{ end }}" data-id="{{.Id}}">
+   {{if .Online}}
+  <span class="component-status">Operational</span>
+  <span class="tool icon-indicator fa fa-check" title="Operational"></span>
                 {{ else }}
-                    <span class="badge bg-white text-black-50 float-right pulse">OFFLINE</span>
-                {{end}}
-            </a>
+                    <span class="component-status">Offline</span>
+                    <span class="tool icon-indicator fa fa-check" title="Offline"></span> 
+                {{end}} 
+    <div class="shared-partial uptime-90-days-wrapper">
+  <div class="legend ">
+  <div class="spacer"></div>
+  <div class="legend-item legend-item-uptime-value legend-item-rhznvxg4v7yh">
+  {{ range VisibleServices }}
+    {{$avgTime := .AvgTime}}
+    <span id="uptime-percent">{{.OnlineDaysPercent 1}}</span>% uptime
+    {{ end }}
+  </div>
+  <div class="spacer"></div>
+</div>
+</div>
+</div>
+</div>
+       {{end}}
+       </a>
             {{ end }}
-        </div>
-    </div>
     {{ end }}
 {{end}}
 
@@ -42,64 +155,8 @@
     {{end}}
     </div>
 {{end}}
+</section>
 
-<div class="col-12 full-col-12">
-{{ if not .Services }}
-    <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">No Services to Monitor!</h4>
-        <p>Your Statping Status Page is working correctly, but you don't have any services to monitor. Go to the <b>Dashboard</b> and add a website to begin really using your status page!</p>
-        <hr>
-        <p class="mb-0">If this is a bug, please make an issue in the Statping Github Repo. <a href="https://github.com/hunterlong/statping" class="btn btn-sm btn-outline-danger float-right">Statping Github Repo</a></p>
-    </div>
-{{end}}
-
-{{ range VisibleServices }}
-    {{$avgTime := .AvgTime}}
-    <div class="mb-4" id="service_id_{{.Id}}">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-12">
-                    <h4 class="mt-3"><a href="/service/{{ServiceLink .}}"{{if not .Online}} class="text-danger"{{end}}>{{ .Name }}</a>
-                    {{if .Online}}
-                        <span class="badge bg-success float-right">ONLINE</span>
-                    {{ else }}
-                        <span class="badge bg-danger float-right pulse">OFFLINE</span>
-                    {{end}}</h4>
-
-                    <div class="row stats_area mt-5">
-                        <div class="col-4">
-                            <span class="lg_number">{{$avgTime}}ms</span>
-                            Average Response
-                        </div>
-                        <div class="col-4">
-                            <span class="lg_number">{{.OnlineDaysPercent 1}}%</span>
-                            Uptime last 24 Hours
-                        </div>
-                        <div class="col-4">
-                            <span class="lg_number">{{.OnlineDaysPercent 7}}%</span>
-                            Uptime last 7 Days
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        {{ if $avgTime }}
-            <div class="chart-container">
-                <div id="service_{{ .Id }}"></div>
-            </div>
-        {{ end }}
-            <div class="row lower_canvas full-col-12 text-white{{if not .Online}} bg-danger{{end}}">
-                <div class="col-10 text-truncate">
-                    <span class="d-none d-md-inline">{{.SmallText}}</span>
-                </div>
-                <div class="col-sm-12 col-md-2">
-                    <a href="/service/{{ServiceLink .}}" class="btn {{if .Online}}btn-success{{else}}btn-danger{{end}} btn-sm float-right dyn-dark btn-block">View Service</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-{{ end }}
 </div>
 </div>
 {{end}}
